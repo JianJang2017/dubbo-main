@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="INFO">
+	<properties>
+		<property name="Encoding">UTF-8</property>
+		<property name="PROJECT_NAME">dubbo-provider</property>
+		<property name="MAX_SIZE">50 MB</property>
+		<!-- 本地 -->
+		 <property name="LOG_PATH">d:/home/logs/dubbo-provider/</property>
+		
+		<!-- linux环境 -->
+	<!--	<property name="LOG_PATH">/home/dubbo/logs/dubbo-provider/</property>-->
+		
+	</properties>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout charset="${Encoding}"
+				pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n" />
+		</Console>
+		<RollingFile name="RollingInfoFile" fileName="${LOG_PATH}/info/${PROJECT_NAME}.log"
+			filePattern="${LOG_PATH}/info/${date:yyyy-MM}/${PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout charset="${Encoding}"
+				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="${MAX_SIZE}" />
+			</Policies>
+			<Filters>  
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>  
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="NEUTRAL"/>  
+            </Filters>  
+		</RollingFile>
+		<!-- USER SUBSCRIBE THREAD -->
+		<RollingFile name="RollingErrorFile" fileName="${LOG_PATH}/error/${PROJECT_NAME}_error.log"
+			filePattern="${LOG_PATH}/error/${date:yyyy-MM}/${PROJECT_NAME}_error-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout charset="${Encoding}"
+				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			 <Filters>  
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>  
+            </Filters>
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<root level="info">
+		 	<appender-ref ref="RollingErrorFile" />  
+		  	<appender-ref ref="RollingInfoFile" />
+			<appender-ref ref="Console" />
+		</root>
+	</loggers>
+</configuration>
